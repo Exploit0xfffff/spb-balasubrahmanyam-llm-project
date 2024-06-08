@@ -12,7 +12,7 @@ model.resize_token_embeddings(64015)  # Adjust the model's vocabulary size to ma
 model.load_state_dict(checkpoint, strict=False)
 
 # Define the prompt for generating a song in Telugu
-prompt = "<2te> ఒక పాట రాయండి. </s>"
+prompt = "<2te> ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి. </s>"
 
 # Tokenize the input prompt directly in Telugu
 inputs = tokenizer(prompt, return_tensors="pt")
