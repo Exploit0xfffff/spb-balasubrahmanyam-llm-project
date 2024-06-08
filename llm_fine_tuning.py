@@ -48,7 +48,7 @@ def pretrain_model(dataset_path, model_name='gpt2', output_dir='./model_output',
     print(f"Model saved to {output_dir}")
 
 if __name__ == "__main__":
-    dataset_path = "formatted_spb_texts.txt"
+    dataset_path = "telugu_lyrics_dataset.txt"
     model_name = "gpt2"
     output_dir = "./model_output"
     epochs = 3
