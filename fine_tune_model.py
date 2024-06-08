@@ -2,6 +2,11 @@ import json
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, Trainer, TrainingArguments, Seq2SeqTrainer, Seq2SeqTrainingArguments
 from datasets import load_dataset, Dataset
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Load the tokenizer and model from the local files
 tokenizer = AutoTokenizer.from_pretrained("./albert-indic64k", do_lower_case=False, use_fast=False, keep_accents=True)
@@ -35,7 +40,9 @@ training_args = Seq2SeqTrainingArguments(
     weight_decay=0.01,
     save_total_limit=3,
     num_train_epochs=3,
-    predict_with_generate=True
+    predict_with_generate=True,
+    logging_dir='./logs',  # Directory for storing logs
+    logging_steps=10,  # Log every 10 steps
 )
 
 # Initialize the Trainer
@@ -44,12 +51,16 @@ trainer = Seq2SeqTrainer(
     args=training_args,
     train_dataset=tokenized_datasets,
     eval_dataset=tokenized_datasets,
-    tokenizer=tokenizer
+    tokenizer=tokenizer,
+    compute_metrics=None  # Add custom metrics if needed
 )
 
 # Train the model
+logger.info("Starting training...")
 trainer.train()
+logger.info("Training completed.")
 
 # Save the fine-tuned model
 model.save_pretrained("./fine_tuned_model")
 tokenizer.save_pretrained("./fine_tuned_model")
+logger.info("Model saved to ./fine_tuned_model")
