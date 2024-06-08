@@ -26,7 +26,9 @@ dataset = Dataset.from_dict(data)
 
 # Tokenize the dataset
 def tokenize_function(examples):
-    return tokenizer(examples['lyrics'], padding="max_length", truncation=True, max_length=256)  # Reduced max_length to 256
+    inputs = tokenizer(examples['lyrics'], padding="max_length", truncation=True, max_length=256)  # Reduced max_length to 256
+    inputs['labels'] = inputs['input_ids'].copy()  # Create labels by copying input_ids
+    return inputs
 
 # Stream the dataset to reduce memory usage
 tokenized_datasets = dataset.map(tokenize_function, batched=True, batch_size=8)
