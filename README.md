@@ -21,6 +21,38 @@ To generate a song in Telugu using the pre-trained model, run the following scri
 python3 generate_song_indic_bart.py
 ```
 
+## LLM Model
+### Purpose
+The LLM (Language Model) used in this project is designed to generate song lyrics that emulate the vocal style of SP Balasubrahmanyam. The model is fine-tuned on a dataset of Telugu song lyrics to capture the nuances of the language and the singer's unique vocal characteristics.
+
+### Model Details
+- **Model Name:** ai4bharat/IndicBART
+- **Tokenizer:** ./albert-indic64k
+- **Checkpoint:** ./separate_script_indicbart_model.ckpt
+- **Language Token:** `<2te>` for Telugu
+
+### Fine-Tuning
+The model is fine-tuned using the `llm_fine_tuning.py` script with the `telugu_lyrics_dataset.txt` dataset. The fine-tuning process involves training the model on the dataset to improve its ability to generate coherent and contextually relevant song lyrics in Telugu.
+
+### Parameters
+- **Max Length:** 1000
+- **Temperature:** 1.5
+- **Early Stopping:** False
+- **No Repeat Ngram Size:** 2
+- **Num Return Sequences:** 3
+
+### Dependencies
+- `torch`
+- `transformers`
+- `sentencepiece`
+- `indic-nlp-library`
+
+### PYTHONPATH
+Ensure the PYTHONPATH is set to include the user's local packages:
+```bash
+export PYTHONPATH=/home/ubuntu/.local/lib/python3.10/site-packages
+```
+
 ## Current Progress
 As of now, the project is approximately 60% complete. The following tasks have been completed:
 - Analyzed the provided data and reviewed the datasets.
