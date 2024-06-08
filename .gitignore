@@ -1,0 +1,7 @@
+# Ignore model and vocabulary files
+albert-indic64k/
+separate_script_indicbart_model.ckpt
+
+# Ignore generated song demo files
+generated_song_demo.txt
+test_speech.wav
