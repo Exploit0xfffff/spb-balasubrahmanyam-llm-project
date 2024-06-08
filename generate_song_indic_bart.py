@@ -12,7 +12,7 @@ model.resize_token_embeddings(64015)  # Adjust the model's vocabulary size to ma
 model.load_state_dict(checkpoint, strict=False)
 
 # Define the prompt for generating a song in Telugu
-prompt = "<2te> ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి. </s>"
+prompt = "<2te> ఒక పాట రాయండి. </s>"
 
 # Tokenize the input prompt directly in Telugu
 inputs = tokenizer(prompt, return_tensors="pt")
@@ -24,7 +24,7 @@ eos_token_id = tokenizer._convert_token_to_id_with_added_voc("</s>")
 decoder_start_token_id = tokenizer._convert_token_to_id_with_added_voc("<2te>")  # Use Telugu token for generation
 outputs = model.generate(
     inputs.input_ids,
-    max_length=500,
+    max_length=1000,  # Increase max_length to allow for longer sequences
     num_beams=5,
     early_stopping=False,
     bos_token_id=bos_token_id,
@@ -35,9 +35,9 @@ outputs = model.generate(
     num_return_sequences=3,
     repetition_penalty=2.0,  # Add repetition penalty to discourage repeated phrases
     length_penalty=1.0,  # Add length penalty to encourage longer sequences
-    temperature=1.0,  # Increase temperature to encourage more diverse output
-    top_k=50,  # Use top-k sampling to limit the number of highest probability tokens to keep for generation
-    top_p=0.95,  # Use top-p (nucleus) sampling to keep the smallest set of tokens with cumulative probability >= top_p
+    temperature=1.7,  # Increase temperature to encourage more diverse output
+    top_k=40,  # Adjust top-k sampling to limit the number of highest probability tokens to keep for generation
+    top_p=0.9,  # Adjust top-p (nucleus) sampling to keep the smallest set of tokens with cumulative probability >= top_p
     do_sample=True  # Enable sampling to allow temperature to take effect
 )
 print("Generated output IDs:", outputs)
