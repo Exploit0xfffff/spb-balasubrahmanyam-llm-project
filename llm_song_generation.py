@@ -1,33 +1,10 @@
 import json
 import torch
-from transformers import GPT2LMHeadModel, GPT2Tokenizer, AutoModelForCausalLM, AutoTokenizer
+from transformers import GPT2LMHeadModel, GPT2Tokenizer, AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, TextDataset, DataCollatorForLanguageModeling
 import requests
-from bs4 import BeautifulSoup
 import argparse
 
 # Function to extract text from a URL
-def extract_text_from_url(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    # Extract text from specific HTML elements that are likely to contain lyrics
-    lyrics_div = soup.find('div', class_='lyrics')
-    if lyrics_div:
-        text = lyrics_div.get_text()
-    else:
-        # Attempt to find other common elements that might contain lyrics
-        lyrics_containers = soup.find_all(['div', 'span'], class_=['lyric-text', 'song-lyrics', 'lyrics-container', 'lyrics', 'text'])
-        if lyrics_containers:
-            text = ' '.join([container.get_text() for container in lyrics_containers])
-        else:
-            # Further refine the search to target more specific elements
-            lyrics_paragraphs = soup.find_all('p', class_='verse')
-            if lyrics_paragraphs:
-                text = ' '.join([p.get_text() for p in lyrics_paragraphs])
-            else:
-                # Fallback to extracting text from all paragraphs
-                paragraphs = soup.find_all('p')
-                text = ' '.join([p.get_text() for p in paragraphs])
-    return text
 
 # Load the pre-trained GPT-2 model and tokenizer
 model_name = 'gpt2'
@@ -72,12 +49,67 @@ def generate_song(prompt, language='en', max_length=300):  # Increased max_lengt
     print(f"Generated outputs: {outputs}")
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
+# Function to pre-train the model
+def pretrain_model(dataset_path, model_name='gpt2', output_dir='./model_output', epochs=3, batch_size=4):
+    print(f"Pre-training model with dataset: {dataset_path}")
+
+    # Load the tokenizer and model
+    tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+    model = GPT2LMHeadModel.from_pretrained(model_name)
+
+    # Load the dataset
+    dataset = TextDataset(
+        tokenizer=tokenizer,
+        file_path=dataset_path,
+        block_size=128
+    )
+
+    # Data collator
+    data_collator = DataCollatorForLanguageModeling(
+        tokenizer=tokenizer,
+        mlm=False,
+    )
+
+    # Training arguments
+    training_args = TrainingArguments(
+        output_dir=output_dir,
+        overwrite_output_dir=True,
+        num_train_epochs=epochs,
+        per_device_train_batch_size=batch_size,
+        save_steps=10_000,
+        save_total_limit=2,
+    )
+
+    # Trainer
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        data_collator=data_collator,
+        train_dataset=dataset,
+    )
+
+    # Train the model
+    trainer.train()
+
+    # Save the model
+    trainer.save_model(output_dir)
+    tokenizer.save_pretrained(output_dir)
+    print(f"Model saved to {output_dir}")
+
 # Command-line interface
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate a song in the style of SP Balasubrahmanyam.")
-    parser.add_argument("prompt", type=str, help="The prompt to generate the song.")
+    parser = argparse.ArgumentParser(description="Generate a song in the style of SP Balasubrahmanyam or pre-train the model.")
+    parser.add_argument("action", type=str, choices=["generate", "pretrain"], help="The action to perform: 'generate' or 'pretrain'.")
+    parser.add_argument("prompt_or_dataset", type=str, help="The prompt to generate the song or the path to the dataset for pre-training.")
     parser.add_argument("--language", type=str, default='en', help="The language of the song (default: 'en').")
+    parser.add_argument("--model_name", type=str, default='gpt2', help="The model name for pre-training (default: 'gpt2').")
+    parser.add_argument("--output_dir", type=str, default='./model_output', help="The output directory for the pre-trained model (default: './model_output').")
+    parser.add_argument("--epochs", type=int, default=3, help="The number of epochs for pre-training (default: 3).")
+    parser.add_argument("--batch_size", type=int, default=4, help="The batch size for pre-training (default: 4).")
     args = parser.parse_args()
 
-    generated_song = generate_song(args.prompt, language=args.language)
-    print(generated_song)
+    if args.action == "generate":
+        generated_song = generate_song(args.prompt_or_dataset, language=args.language)
+        print(generated_song)
+    elif args.action == "pretrain":
+        pretrain_model(args.prompt_or_dataset, model_name=args.model_name, output_dir=args.output_dir, epochs=args.epochs, batch_size=args.batch_size)
