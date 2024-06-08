@@ -12,23 +12,29 @@ model.resize_token_embeddings(64015)  # Adjust the model's vocabulary size to ma
 model.load_state_dict(checkpoint, strict=False)
 
 # Define the prompt for generating a song in Telugu
-prompt = "తెలుగు పాట </s> <2te>"
+prompt = "<2te> ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి. </s>"
+
+# Convert Telugu script to Devanagari script
+prompt_devanagari = UnicodeIndicTransliterator.transliterate(prompt, "tel", "dev")
 
 # Tokenize the input prompt
-inputs = tokenizer(prompt, return_tensors="pt")
+inputs = tokenizer(prompt_devanagari, return_tensors="pt")
 print("Tokenized input IDs:", inputs.input_ids)
 
 # Generate text using the model
 bos_token_id = tokenizer._convert_token_to_id_with_added_voc("<s>")
 eos_token_id = tokenizer._convert_token_to_id_with_added_voc("</s>")
 decoder_start_token_id = tokenizer._convert_token_to_id_with_added_voc("<2te>")  # Use Telugu token for generation
-outputs = model.generate(inputs.input_ids, max_length=300, num_beams=5, early_stopping=False, bos_token_id=bos_token_id, eos_token_id=eos_token_id, decoder_start_token_id=decoder_start_token_id)
+outputs = model.generate(inputs.input_ids, max_length=500, num_beams=5, early_stopping=False, bos_token_id=bos_token_id, eos_token_id=eos_token_id, decoder_start_token_id=decoder_start_token_id, forced_bos_token_id=decoder_start_token_id)
 print("Generated output IDs:", outputs)
 
 # Decode the generated text
-generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print("Generated text:", generated_text)
+generated_text_devanagari = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print("Generated text in Devanagari:", generated_text_devanagari)
+
+# Convert the generated text from Devanagari script back to Telugu script
+generated_text_telugu = UnicodeIndicTransliterator.transliterate(generated_text_devanagari, "dev", "tel")
 
 # Print the generated song
 print("Generated Song in Telugu:")
-print(generated_text)
+print(generated_text_telugu)
