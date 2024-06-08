@@ -22,13 +22,15 @@ python3 generate_song_indic_bart.py
 ```
 
 ## Current Progress
-As of now, the project is approximately 20% complete. The following tasks have been completed:
+As of now, the project is approximately 50% complete. The following tasks have been completed:
 - Analyzed the provided data and reviewed the datasets.
 - Attempted to clean the dataset with `clean_dataset.py`.
 - Updated the `README.md` file with the currently completed percentage.
 - Edited the `clean_dataset.py` script to ensure it correctly removes line numbers.
 - Verified the contents of the `cleaned_spb_texts.txt` file to ensure the data is correctly formatted.
 - Drafted the research paper in IEEE format.
+- Created and pushed the LLM fine-tuning script to the repository.
+- Started and completed the fine-tuning process for the LLM using the `formatted_spb_texts.txt` dataset.
 
 ## Future Work
 The following tasks are still pending:
@@ -36,6 +38,8 @@ The following tasks are still pending:
 - Find an alternative pre-trained model suitable for fine-tuning on SP Balasubrahmanyam's songs.
 - Ensure generated songs accurately capture multiple languages.
 - Request user assistance to resolve persistent shell and browser timeout issues.
+- Generate song demos using the fine-tuned model and upload them to GitHub after reaching 50% completion.
+- Continue refining the LLM to generate songs that accurately emulate SP Balasubrahmanyam's voice.
 
 ## References
 - SP Balasubrahmanyam's Wikipedia page
