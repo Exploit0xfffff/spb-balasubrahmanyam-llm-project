@@ -12,10 +12,14 @@ model.resize_token_embeddings(64015)  # Adjust the model's vocabulary size to ma
 model.load_state_dict(checkpoint, strict=False)
 
 # Define the prompt for generating a song in Telugu
-prompt = "<2te> ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి. </s>"
+prompt = "ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి."
 
-# Tokenize the input prompt directly in Telugu
-inputs = tokenizer(prompt, return_tensors="pt")
+# Convert the prompt to Devanagari script
+prompt_devanagari = UnicodeIndicTransliterator.transliterate(prompt, "te", "hi")
+prompt_devanagari = f"{prompt_devanagari} </s> <2te>"
+
+# Tokenize the input prompt in Devanagari script
+inputs = tokenizer(prompt_devanagari, return_tensors="pt")
 print("Tokenized input IDs:", inputs.input_ids)
 
 # Generate text using the model
@@ -44,17 +48,21 @@ print("Generated output IDs:", outputs)
 
 # Decode the generated text
 generated_texts = [tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
-print("Generated texts in Telugu:", generated_texts)
+print("Generated texts in Devanagari:", generated_texts)
+
+# Convert the generated text back to Telugu script
+generated_texts_telugu = [UnicodeIndicTransliterator.transliterate(text, "hi", "te") for text in generated_texts]
+print("Generated texts in Telugu:", generated_texts_telugu)
 
 # Print the generated songs
 print("Generated Songs in Telugu:")
-for idx, song in enumerate(generated_texts):
+for idx, song in enumerate(generated_texts_telugu):
     print(f"Song {idx + 1}:")
     print(song)
     print()
 
 # Save the generated songs to a file
 with open("generated_song_demo.txt", "w", encoding="utf-8") as f:
-    for idx, song in enumerate(generated_texts):
+    for idx, song in enumerate(generated_texts_telugu):
         f.write(f"Song {idx + 1}:\n")
         f.write(song + "\n\n")
