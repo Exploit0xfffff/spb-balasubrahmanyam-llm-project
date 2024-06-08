@@ -28,7 +28,8 @@ dataset = Dataset.from_dict(data)
 def tokenize_function(examples):
     return tokenizer(examples['lyrics'], padding="max_length", truncation=True, max_length=512)
 
-tokenized_datasets = dataset.map(tokenize_function, batched=True)
+# Stream the dataset to reduce memory usage
+tokenized_datasets = dataset.map(tokenize_function, batched=True, batch_size=8)
 
 # Define the training arguments
 training_args = Seq2SeqTrainingArguments(
