@@ -56,13 +56,14 @@ print("Generated texts in Devanagari:", generated_texts)
 
 # Convert the generated text back to Telugu script
 generated_texts_telugu = [transliterator_hi_to_te.transform(text) for text in generated_texts]
-print("Generated texts in Telugu:", generated_texts_telugu)
+print("Transliterated texts before filtering:", generated_texts_telugu)
 
 # Filter out non-Telugu characters from the generated text
 filtered_texts_telugu = []
 for text in generated_texts_telugu:
     filtered_text = ''.join([char for char in text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t']])
     filtered_texts_telugu.append(filtered_text)
+print("Filtered texts in Telugu:", filtered_texts_telugu)
 
 # Implement a content filter to check for inappropriate content
 prohibited_words = ["గైంగరేప", "అశ్లీల", "అమానవీయ"]
