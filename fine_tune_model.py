@@ -26,7 +26,7 @@ dataset = Dataset.from_dict(data)
 
 # Tokenize the dataset
 def tokenize_function(examples):
-    inputs = tokenizer(examples['lyrics'], padding="max_length", truncation=True, max_length=256)  # Reduced max_length to 256
+    inputs = tokenizer(examples['lyrics'], padding="max_length", truncation=True, max_length=128)  # Further reduced max_length to 128
     inputs['labels'] = inputs['input_ids'].copy()  # Create labels by copying input_ids
     return inputs
 
@@ -46,7 +46,7 @@ training_args = Seq2SeqTrainingArguments(
     predict_with_generate=True,
     logging_dir='./logs',  # Directory for storing logs
     logging_steps=10,  # Log every 10 steps
-    gradient_accumulation_steps=8,  # Increased gradient accumulation steps to 8
+    gradient_accumulation_steps=4,  # Reduced gradient accumulation steps to 4
 )
 
 # Initialize the Trainer
