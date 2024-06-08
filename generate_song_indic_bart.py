@@ -22,7 +22,7 @@ print("Tokenized input IDs:", inputs.input_ids)
 bos_token_id = tokenizer._convert_token_to_id_with_added_voc("<s>")
 eos_token_id = tokenizer._convert_token_to_id_with_added_voc("</s>")
 decoder_start_token_id = tokenizer._convert_token_to_id_with_added_voc("<2te>")  # Use Telugu token for generation
-outputs = model.generate(inputs.input_ids, max_length=150, num_beams=10, early_stopping=True, bos_token_id=bos_token_id, eos_token_id=eos_token_id, decoder_start_token_id=decoder_start_token_id, forced_bos_token_id=bos_token_id, forced_eos_token_id=eos_token_id)
+outputs = model.generate(inputs.input_ids, max_length=300, num_beams=10, early_stopping=False, bos_token_id=bos_token_id, eos_token_id=eos_token_id, decoder_start_token_id=decoder_start_token_id, forced_bos_token_id=bos_token_id, forced_eos_token_id=eos_token_id)
 print("Generated output IDs:", outputs)
 
 # Decode the generated text
