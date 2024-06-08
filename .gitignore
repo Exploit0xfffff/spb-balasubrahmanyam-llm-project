@@ -9,3 +9,6 @@ test_speech.wav
 # Ignore cache files
 __pycache__/
 *.pyc
+
+# Ignore model output files
+model_output/
