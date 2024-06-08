@@ -43,6 +43,7 @@ training_args = Seq2SeqTrainingArguments(
     predict_with_generate=True,
     logging_dir='./logs',  # Directory for storing logs
     logging_steps=10,  # Log every 10 steps
+    gradient_accumulation_steps=4,  # Accumulate gradients over 4 steps
 )
 
 # Initialize the Trainer
