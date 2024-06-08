@@ -1,6 +1,8 @@
 import re
 
 def clean_dataset(input_file, output_file):
+    print(f"Input file: {input_file}")
+    print(f"Output file: {output_file}")
     with open(input_file, 'r') as file, open(output_file, 'w') as outfile:
         for line in file:
             print(f"Original line: {line.strip()}")
@@ -10,7 +12,7 @@ def clean_dataset(input_file, output_file):
             cleaned_line = re.sub(r'^\s*\d+\s*', '', line)
             print(f"Cleaned line: {cleaned_line.strip()}")
             if cleaned_line.strip():
-                outfile.write(cleaned_line + '\n')
+                outfile.write(cleaned_line)
                 print(f"Written to outfile: {cleaned_line.strip()}")
 
 if __name__ == "__main__":
