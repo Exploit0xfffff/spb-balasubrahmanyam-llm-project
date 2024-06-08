@@ -5,3 +5,7 @@ separate_script_indicbart_model.ckpt
 # Ignore generated song demo files
 generated_song_demo.txt
 test_speech.wav
+
+# Ignore cache files
+__pycache__/
+*.pyc
