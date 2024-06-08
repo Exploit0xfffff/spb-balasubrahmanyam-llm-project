@@ -52,6 +52,8 @@ As of now, the project is approximately 20% complete. The following tasks have b
 - Edited the `clean_dataset.py` script to ensure it correctly removes line numbers.
 - Verified the contents of the `cleaned_spb_texts.txt` file to ensure the data is correctly formatted.
 - Drafted the research paper in IEEE format.
+- Successfully pushed the project to the GitHub repository `spb-balasubrahmanyam-llm-project`.
+- Generated song demos using the pre-trained LLM.
 
 The following tasks are still pending:
 - Upload all datasets to GitHub, pre-train the LLM, and deploy the LLM model.
