@@ -38,7 +38,9 @@ outputs = model.generate(
     num_return_sequences=3,
     repetition_penalty=2.0,  # Add repetition penalty to discourage repeated phrases
     length_penalty=1.0,  # Add length penalty to encourage longer sequences
-    temperature=0.7,  # Add temperature to control the randomness of predictions
+    temperature=1.0,  # Increase temperature to encourage more diverse output
+    top_k=50,  # Use top-k sampling to limit the number of highest probability tokens to keep for generation
+    top_p=0.95,  # Use top-p (nucleus) sampling to keep the smallest set of tokens with cumulative probability >= top_p
     do_sample=True  # Enable sampling to allow temperature to take effect
 )
 print("Generated output IDs:", outputs)
