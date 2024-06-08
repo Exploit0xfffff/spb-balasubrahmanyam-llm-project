@@ -38,9 +38,9 @@ As of now, the project is approximately 20% complete. The following tasks have b
 - Updated the `README.md` file with the currently completed percentage.
 - Edited the `clean_dataset.py` script to ensure it correctly removes line numbers.
 - Verified the contents of the `cleaned_spb_texts.txt` file to ensure the data is correctly formatted.
+- Drafted the research paper in IEEE format.
 
 The following tasks are still pending:
-- Write the research paper in IEEE format documenting the process and findings.
 - Upload all datasets to GitHub, pre-train the LLM, and deploy the LLM model.
 - Find an alternative pre-trained model suitable for fine-tuning on SP Balasubrahmanyam's songs.
 - Ensure generated songs accurately capture multiple languages.

@@ -11,6 +11,7 @@ def clean_dataset(input_file, output_file):
             print(f"Cleaned line: {cleaned_line.strip()}")
             if cleaned_line.strip():
                 outfile.write(cleaned_line + '\n')
+                print(f"Written to outfile: {cleaned_line.strip()}")
 
 if __name__ == "__main__":
     input_file = 'spb_texts.txt'
