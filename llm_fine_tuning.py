@@ -1,7 +1,7 @@
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer, Trainer, TrainingArguments, TextDataset, DataCollatorForLanguageModeling
 
-def pretrain_model(dataset_path, model_name='gpt2', output_dir='./model_output', epochs=3, batch_size=4):
+def pretrain_model(dataset_path, model_name='gpt2', output_dir='./model_output', epochs=3, batch_size=2):
     print(f"Pre-training model with dataset: {dataset_path}")
 
     # Load the tokenizer and model
@@ -52,6 +52,6 @@ if __name__ == "__main__":
     model_name = "gpt2"
     output_dir = "./model_output"
     epochs = 3
-    batch_size = 4
+    batch_size = 2
 
     pretrain_model(dataset_path, model_name, output_dir, epochs, batch_size)
