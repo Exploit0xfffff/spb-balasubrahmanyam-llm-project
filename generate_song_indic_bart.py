@@ -9,19 +9,18 @@ print("sys.executable:", sys.executable)
 print("sys.path:", sys.path)
 print("Environment Variables:", os.environ)
 print("PYTHONPATH:", os.environ.get('PYTHONPATH', 'Not Set'))
+print("sys.path at runtime:", sys.path)
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from indicnlp.transliterate.unicode_transliterator import UnicodeIndicTransliterator
+from indicnlp.transliterate.unicode_transliterate import UnicodeIndicTransliterator
 import torch
 
 # Load the tokenizer and model from the local files
-tokenizer = AutoTokenizer.from_pretrained("./albert-indic64k", do_lower_case=False, use_fast=False, keep_accents=True)
+tokenizer = AutoTokenizer.from_pretrained("ai4bharat/IndicBART", do_lower_case=False, use_fast=False, keep_accents=True)
 model = AutoModelForSeq2SeqLM.from_pretrained("ai4bharat/IndicBART")
 
-# Load the model weights from the checkpoint file
-checkpoint = torch.load("./separate_script_indicbart_model.ckpt", map_location=torch.device('cpu'))
-model.resize_token_embeddings(64015)  # Adjust the model's vocabulary size to match the checkpoint
-model.load_state_dict(checkpoint, strict=False)
-
+# Load the model weights from the pytorch_model.bin file
+model_weights_path = "./model_output/pytorch_model.bin"
+model.load_state_dict(torch.load(model_weights_path, map_location=torch.device('cpu')), strict=False)
 # Define the prompt for generating a song in Telugu
 prompt = "ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి. పాట ప్రారంభం:"
 
@@ -33,6 +32,8 @@ prompt_devanagari = f"{prompt_devanagari} </s> <2te>"
 # Tokenize the input prompt in Devanagari script
 inputs = tokenizer(prompt_devanagari, return_tensors="pt")
 print("Tokenized input IDs:", inputs.input_ids)
+print("Token ID range:", inputs.input_ids.min().item(), "-", inputs.input_ids.max().item())
+print("Model embedding layer configuration:", model.get_input_embeddings())
 
 # Generate text using the model
 bos_token_id = tokenizer._convert_token_to_id_with_added_voc("<s>")

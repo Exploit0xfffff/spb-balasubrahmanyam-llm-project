@@ -28,7 +28,7 @@ The LLM (Language Model) used in this project is designed to generate song lyric
 ### Model Details
 - **Model Name:** ai4bharat/IndicBART
 - **Tokenizer:** ./albert-indic64k
-- **Checkpoint:** ./separate_script_indicbart_model.ckpt
+- **Checkpoint:** ./model_output/pytorch_model.bin
 - **Language Token:** `<2te>` for Telugu
 
 ### Fine-Tuning
@@ -46,6 +46,8 @@ The model is fine-tuned using the `llm_fine_tuning.py` script with the `telugu_l
 - `transformers`
 - `sentencepiece`
 - `indic-nlp-library`
+- `accelerate`
+- `safetensors`
 
 ### PYTHONPATH
 Ensure the PYTHONPATH is set to include the user's local packages:
@@ -54,7 +56,7 @@ export PYTHONPATH=/home/ubuntu/.local/lib/python3.10/site-packages
 ```
 
 ## Current Progress
-As of now, the project is approximately 60% complete. The following tasks have been completed:
+As of now, the project is approximately 80% complete. The following tasks have been completed:
 - Analyzed the provided data and reviewed the datasets.
 - Attempted to clean the dataset with `clean_dataset.py`.
 - Updated the `README.md` file with the currently completed percentage.
@@ -72,7 +74,7 @@ The following tasks are still pending:
 - Ensure generated songs accurately capture multiple languages.
 - Request user assistance to resolve persistent shell and browser timeout issues.
 - Continue refining the LLM to generate songs that accurately emulate SP Balasubrahmanyam's voice.
-- Upload the refined song demos to GitHub after reaching 50% completion.
+- Upload the refined song demos to GitHub after reaching 100% completion.
 
 ## References
 - SP Balasubrahmanyam's Wikipedia page

@@ -2,3 +2,5 @@ torch
 transformers
 sentencepiece
 indic-nlp-library
+accelerate
+safetensors
