@@ -53,18 +53,18 @@ outputs = model.generate(
     inputs.input_ids,
     max_length=1500,  # Increase max_length to allow for longer sequences
     num_beams=5,
-    early_stopping=False,
+    early_stopping=True,
     bos_token_id=bos_token_id,
     eos_token_id=eos_token_id,
     decoder_start_token_id=decoder_start_token_id,
     forced_bos_token_id=decoder_start_token_id,
     no_repeat_ngram_size=3,
     num_return_sequences=5,
-    repetition_penalty=2.0,  # Add repetition penalty to discourage repeated phrases
+    repetition_penalty=1.5,  # Add repetition penalty to discourage repeated phrases
     length_penalty=1.0,  # Add length penalty to encourage longer sequences
-    temperature=0.8,  # Adjust temperature to balance diversity and coherence
-    top_k=30,  # Adjust top-k sampling to limit the number of highest probability tokens to keep for generation
-    top_p=0.95,  # Adjust top-p (nucleus) sampling to keep the smallest set of tokens with cumulative probability >= top_p
+    temperature=0.9,  # Adjust temperature to balance diversity and coherence
+    top_k=40,  # Adjust top-k sampling to limit the number of highest probability tokens to keep for generation
+    top_p=0.9,  # Adjust top-p (nucleus) sampling to keep the smallest set of tokens with cumulative probability >= top_p
     do_sample=True  # Enable sampling to allow temperature to take effect
 )
 print("Generated output IDs:", outputs)
@@ -74,18 +74,19 @@ generated_texts = [tokenizer.decode(output, skip_special_tokens=True) for output
 print("Generated texts:", generated_texts)
 
 # Filter out non-Telugu characters and placeholders from the generated text
+# Filter out non-Telugu characters and placeholders from the generated text
 filtered_texts_telugu = []
 for text in generated_texts:
     filtered_text = ''.join([char for char in text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t']])
     # Remove placeholders and incomplete words
-    filtered_text = filtered_text.replace('...', '')
+    filtered_text = filtered_text.replace('...', '').replace('?', '').replace('!', '').replace(':', '').replace(';', '').replace('-', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').replace('"', '').replace("'", '')
     # Ensure the text is not empty and has a minimum length
-    if len(filtered_text) > 10:
-        filtered_texts_telugu.append(filtered_text)
+    if len(filtered_text.strip()) > 10:
+        filtered_texts_telugu.append(filtered_text.strip())
 print("Filtered texts in Telugu:", filtered_texts_telugu)
 
 # Implement a content filter to check for inappropriate content
-prohibited_words = ["గైంగ???ేప", "అశ్లీల", "అమానవీయ"]
+prohibited_words = ["గైంగరేప్", "అశ్లీల", "అమానవీయ"]
 final_texts_telugu = []
 for text in filtered_texts_telugu:
     if not any(word in text for word in prohibited_words):
@@ -96,16 +97,16 @@ for text in filtered_texts_telugu:
             inputs.input_ids,
             max_length=1500,
             num_beams=5,
-            early_stopping=False,
+            early_stopping=True,
             bos_token_id=bos_token_id,
             eos_token_id=eos_token_id,
             decoder_start_token_id=decoder_start_token_id,
             forced_bos_token_id=decoder_start_token_id,
             no_repeat_ngram_size=3,
             num_return_sequences=1,
-            repetition_penalty=2.0,
+            repetition_penalty=1.5,
             length_penalty=1.0,
-            temperature=1.2,
+            temperature=1.0,
             top_k=50,
             top_p=0.9,
             do_sample=True
