@@ -112,7 +112,8 @@ for text in filtered_texts_telugu:
         )
         new_generated_text = tokenizer.decode(new_outputs[0], skip_special_tokens=True)
         new_filtered_text = ''.join([char for char in new_generated_text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t']])
-        final_texts_telugu.append(new_filtered_text)
+        if len(new_filtered_text) > 10:
+            final_texts_telugu.append(new_filtered_text)
 
 # Print the generated songs
 print("Generated Songs in Telugu:")
