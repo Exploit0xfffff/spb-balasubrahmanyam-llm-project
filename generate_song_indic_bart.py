@@ -35,14 +35,12 @@ prompts = [
 # Randomly select a prompt from the list
 prompt = random.choice(prompts)
 
-# Initialize the Transliterator for Telugu to Devanagari and vice versa
-# Convert the prompt to Devanagari script
-prompt_devanagari = UnicodeIndicTransliterator.transliterate(prompt, 'tel', 'hin')
-prompt_devanagari = f"{prompt_devanagari} </s> <2te>"
-print("Prompt in Devanagari:", prompt_devanagari)
+# Use the prompt directly in Telugu script
+prompt_telugu = f"{prompt} </s> <2te>"
+print("Prompt in Telugu:", prompt_telugu)
 
 # Tokenize the input prompt in Devanagari script
-inputs = tokenizer(prompt_devanagari, return_tensors="pt")
+inputs = tokenizer(prompt_telugu, return_tensors="pt")
 print("Tokenized input IDs:", inputs.input_ids)
 print("Token ID range:", inputs.input_ids.min().item(), "-", inputs.input_ids.max().item())
 print("Model embedding layer configuration:", model.get_input_embeddings())
@@ -73,16 +71,12 @@ print("Generated output IDs:", outputs)
 
 # Decode the generated text
 generated_texts = [tokenizer.decode(output, skip_special_tokens=True) for output in outputs]
-print("Generated texts in Devanagari:", generated_texts)
-
-# Convert the generated text back to Telugu script
-generated_texts_telugu = [UnicodeIndicTransliterator.transliterate(text, 'hin', 'tel') for text in generated_texts]
-print("Transliterated texts before filtering:", generated_texts_telugu)
+print("Generated texts:", generated_texts)
 
 # Filter out non-Telugu characters and placeholders from the generated text
 filtered_texts_telugu = []
-for text in generated_texts_telugu:
-    filtered_text = ''.join([char for char in text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t', '�']])
+for text in generated_texts:
+    filtered_text = ''.join([char for char in text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t']])
     # Remove placeholders and incomplete words
     filtered_text = filtered_text.replace('...', '')
     # Ensure the text is not empty and has a minimum length
@@ -117,8 +111,7 @@ for text in filtered_texts_telugu:
             do_sample=True
         )
         new_generated_text = tokenizer.decode(new_outputs[0], skip_special_tokens=True)
-        new_generated_text_telugu = UnicodeIndicTransliterator.transliterate(new_generated_text, 'hin', 'tel')
-        new_filtered_text = ''.join([char for char in new_generated_text_telugu if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t']])
+        new_filtered_text = ''.join([char for char in new_generated_text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t']])
         final_texts_telugu.append(new_filtered_text)
 
 # Print the generated songs
