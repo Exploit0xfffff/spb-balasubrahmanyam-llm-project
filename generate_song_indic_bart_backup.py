@@ -61,12 +61,12 @@ outputs = model.generate(
     decoder_start_token_id=decoder_start_token_id,
     forced_bos_token_id=decoder_start_token_id,
     no_repeat_ngram_size=3,
-    num_return_sequences=5,
+    num_return_sequences=3,
     repetition_penalty=2.0,  # Add repetition penalty to discourage repeated phrases
     length_penalty=1.0,  # Add length penalty to encourage longer sequences
-    temperature=0.8,  # Adjust temperature to balance diversity and coherence
-    top_k=30,  # Adjust top-k sampling to limit the number of highest probability tokens to keep for generation
-    top_p=0.95,  # Adjust top-p (nucleus) sampling to keep the smallest set of tokens with cumulative probability >= top_p
+    temperature=1.2,  # Adjust temperature to balance diversity and coherence
+    top_k=50,  # Adjust top-k sampling to limit the number of highest probability tokens to keep for generation
+    top_p=0.9,  # Adjust top-p (nucleus) sampling to keep the smallest set of tokens with cumulative probability >= top_p
     do_sample=True  # Enable sampling to allow temperature to take effect
 )
 print("Generated output IDs:", outputs)
