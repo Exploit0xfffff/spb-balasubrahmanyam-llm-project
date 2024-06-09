@@ -28,6 +28,7 @@ prompt = "ఈ పాట గురించి ప్రేమ, బాధ, ఆన
 # Convert the prompt to Devanagari script
 prompt_devanagari = UnicodeIndicTransliterator.transliterate(prompt, 'tel', 'hin')
 prompt_devanagari = f"{prompt_devanagari} </s> <2te>"
+print("Prompt in Devanagari:", prompt_devanagari)
 
 # Tokenize the input prompt in Devanagari script
 inputs = tokenizer(prompt_devanagari, return_tensors="pt")
@@ -75,7 +76,7 @@ for text in generated_texts_telugu:
 print("Filtered texts in Telugu:", filtered_texts_telugu)
 
 # Implement a content filter to check for inappropriate content
-prohibited_words = ["గైంగరేప", "అశ్లీల", "అమానవీయ"]
+prohibited_words = ["గైంగ???ేప", "అశ్లీల", "అమానవీయ"]
 final_texts_telugu = []
 for text in filtered_texts_telugu:
     if not any(word in text for word in prohibited_words):
