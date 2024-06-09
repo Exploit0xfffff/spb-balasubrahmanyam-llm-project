@@ -79,11 +79,15 @@ print("Generated texts in Devanagari:", generated_texts)
 generated_texts_telugu = [UnicodeIndicTransliterator.transliterate(text, 'hin', 'tel') for text in generated_texts]
 print("Transliterated texts before filtering:", generated_texts_telugu)
 
-# Filter out non-Telugu characters from the generated text
+# Filter out non-Telugu characters and placeholders from the generated text
 filtered_texts_telugu = []
 for text in generated_texts_telugu:
-    filtered_text = ''.join([char for char in text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t']])
-    filtered_texts_telugu.append(filtered_text)
+    filtered_text = ''.join([char for char in text if 0x0C00 <= ord(char) <= 0x0C7F or char in [' ', '.', ',', '!', '?', ':', ';', '-', '(', ')', '[', ']', '{', '}', '"', "'", '\n', '\t', '�']])
+    # Remove placeholders and incomplete words
+    filtered_text = filtered_text.replace('...', '')
+    # Ensure the text is not empty and has a minimum length
+    if len(filtered_text) > 10:
+        filtered_texts_telugu.append(filtered_text)
 print("Filtered texts in Telugu:", filtered_texts_telugu)
 
 # Implement a content filter to check for inappropriate content
