@@ -2,6 +2,7 @@
 
 import sys
 import os
+import random
 
 os.environ['PYTHONPATH'] = '/home/ubuntu/.local/lib/python3.10/site-packages'
 
@@ -21,8 +22,18 @@ model = AutoModelForSeq2SeqLM.from_pretrained("ai4bharat/IndicBART")
 # Load the model weights from the pytorch_model.bin file
 model_weights_path = "./model_output/pytorch_model.bin"
 model.load_state_dict(torch.load(model_weights_path, map_location=torch.device('cpu')), strict=False)
-# Define the prompt for generating a song in Telugu
-prompt = "ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి. పాట ప్రారంభం:"
+
+# Define a list of prompts for generating songs in Telugu
+prompts = [
+    "ఈ పాట గురించి ప్రేమ, బాధ, ఆనందం, మరియు జీవితం గురించి ఒక పూర్తి పాట రాయండి. పాట ప్రారంభం:",
+    "ఈ పాట గురించి స్నేహం, ఆశ, మరియు కలలు గురించి ఒక పూర్తి పాట రాయండి. పాట ప్రారంభం:",
+    "ఈ పాట గురించి కుటుంబం, ఆనందం, మరియు ఆశయం గురించి ఒక పూర్తి పాట రాయండి. పాట ప్రారంభం:",
+    "ఈ పాట గురించి ప్రకృతి, సౌందర్యం, మరియు ప్రశాంతత గురించి ఒక పూర్తి పాట రాయండి. పాట ప్రారంభం:",
+    "ఈ పాట గురించి విజయాలు, సవాళ్లు, మరియు ప్రేరణ గురించి ఒక పూర్తి పాట రాయండి. పాట ప్రారంభం:"
+]
+
+# Randomly select a prompt from the list
+prompt = random.choice(prompts)
 
 # Initialize the Transliterator for Telugu to Devanagari and vice versa
 # Convert the prompt to Devanagari script
